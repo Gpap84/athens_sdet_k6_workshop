@@ -1,6 +1,8 @@
 <div align="center">
   
   ![banner](docs/ts-js-k6.png)
+</div>  
+  
 
 # QA k6 Workshop
 
