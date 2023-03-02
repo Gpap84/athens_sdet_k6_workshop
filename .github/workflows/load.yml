@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
    inputs:
     test:
-      description: 'The test script to run example authentication-test'
+      description: 'The test script to run example get-200-status-test'
       required: true
     platform:
       description: 'The base url to be used like https://test-api.k6.io/'
