@@ -32,7 +32,7 @@ jobs:
       - name: Build
         uses: borales/actions-yarn@v3.0.0
         with:
-          cmd: run:build
+          cmd: start
 
         # set up k6
       - name: Run local k6 test
@@ -40,14 +40,3 @@ jobs:
         with:
          filename: dist/${{ github.event.inputs.test }}.js
          flags: --env BASE_URL=${{ github.event.inputs.platform }}
-
-        # Upload Artifact for HTML Report 
-      - name: Upload html report for job 1
-        uses: actions/upload-artifact@v2
-        with:
-          #html file name define in k6 code
-          name: k6_summary  
-          # path in our github repo
-          path: summary.html
-          # available time period file after that is automatically remove from the workspace 
-          retention-days: 2
