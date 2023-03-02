@@ -1,0 +1,53 @@
+name: k6 Load Test Suite
+
+# Controls when the workflow will run
+on:
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+   inputs:
+    test:
+      description: 'The test script to run example authentication-test'
+      required: true
+    platform:
+      description: 'The base url to be used like https://test-api.k6.io/'
+      required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "job_1"
+  manual-single-trigger:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repo 
+        uses: actions/checkout@v2
+
+      - name: Install Packages
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install
+          
+      - name: Build
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: run:build
+
+        # set up k6
+      - name: Run local k6 test
+        uses: k6io/action@v0.2.0
+        with:
+         filename: dist/${{ github.event.inputs.test }}.js
+         flags: --env BASE_URL=${{ github.event.inputs.platform }}
+
+        # Upload Artifact for HTML Report 
+      - name: Upload html report for job 1
+        uses: actions/upload-artifact@v2
+        with:
+          #html file name define in k6 code
+          name: k6_summary  
+          # path in our github repo
+          path: summary.html
+          # available time period file after that is automatically remove from the workspace 
+          retention-days: 2

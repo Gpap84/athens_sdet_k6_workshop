@@ -2,75 +2,38 @@
   
   ![banner](docs/ts-js-k6.png)
 
-# Template to use TypeScript with k6
+# QA k6 Workshop
 
-![.github/workflows/push.yml](https://github.com/k6io/template-typescript/workflows/.github/workflows/push.yml/badge.svg?branch=master)
-
-</div>
-
-This repository provides a scaffolding project to start using TypeScript in your k6 scripts.
-
-## Rationale
-
-While JavaScript is great for a myriad of reasons, one area where it fall short is type safety and developer ergonomics. It's perfectly possible to write JavaScript code that will look OK and behave OK until a certain condition forces the executor into a faulty branch.
-
-While it, of course, still is possible to shoot yourself in the foot with TypeScript as well, it's significantly harder. Without adding much overhead, TypeScript will:
-
-- Improve the ability to safely refactor your code.
-- Improve readability and maintainability.
-- Allow you to drop a lot of the defensive code previously needed to make sure consumers are calling functions properly.
+Performance testing framework for k6 demo.
 
 
-## Prerequisites
+## Dependencies :toolbox:	
 
-- [k6](https://k6.io/docs/getting-started/installation)
-- [NodeJS](https://nodejs.org/en/download/)
-- [Yarn](https://yarnpkg.com/getting-started/install) (optional)
+* [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
+* [Docker](https://docs.docker.com/get-docker/) & Docker Compose
+* [K6](https://k6.io/docs/getting-started/installation/) (for native runs)
 
-## Installation
+## Quick Start :zap:
 
-**Creating a project from the `template-typescript` template**
+* Clone this repository
+* Run `yarn install`
+* Run `yarn build` to create a build of the source code under the `dist` folder.
+* If run with native k6 support execute `k6 run dist/<script_name>.js`
+* Run `yarn run-docker` to run a sample scenario.
 
-To generate a TypeScript project that includes the dependencies and initial configuration, navigate to the [template-typescript](https://github.com/k6io/template-typescript) page and click **Use this template**.
+## Github Actions
+The tests can run directly from GA just by using the appropriate workflow load.yml under workflows. It will generate a summary.html report on GitHub if we want to visualize metrics and results. The job is triggered manually but we can set a smoke suite per PR merge.
 
-  ![](docs/use-this-template-button.png)
 
+## Monitoring :chart_with_upwards_trend:
+![Screenshot 2022-09-19 at 7 52 10 PM](https://user-images.githubusercontent.com/1075568/191215641-81a1f568-2885-4e1b-aa3e-cb7cc5a4199c.png)
 
-**Install dependencies**
+The framework supports monitoring via Grafana and InfluxDB. Both of them are setup locally as docker containers and orchestrated via Docker Compose. To start-up monitoring
 
-Clone the generated repository on your local machine, move to the project root folder and install the dependencies defined in [`package.json`](./package.json)
+* Start them via `yarn monitor`
+* Go to `localhost:3000` in your browser
+* Navigate to `Dashboards` and then `Import`
+* Go to the `Import via grafana.com` form and add 2587 or find the ID of any other K6 compatible dashboard from [Grafana](https://grafana.com/grafana/dashboards/?search=k6)
+* Run the test via `yarn run-docker` and see results being visualised.
 
-```bash
-$ yarn install
-```
-
-## Running the test
-
-To run a test written in TypeScript, we first have to transpile the TypeScript code into JavaScript and bundle the project
-
-```bash
-$ yarn webpack
-```
-
-This command creates the final test files to the `./dist` folder.
-
-Once that is done, we can run our script the same way we usually do, for instance:
-
-```bash
-$ k6 run dist/get-200-status-test.js
-```
-
-## Writing own tests
-
-House rules for writing tests:
-- The test code is located in `src` folder
-- The entry points for the tests need to have "_test_" word in the name to distinguish them from auxiliary files. You can change the entry [here](./webpack.config.js#L8). 
-- If static files are required then add them to `./assets` folder. Its content gets copied to the destination folder (`dist`) along with compiled scripts.
-
-### Transpiling and Bundling
-
-By default, k6 can only run ES5.1 JavaScript code. To use TypeScript, we have to set up a bundler that converts TypeScript to JavaScript code. 
-
-This project uses `Babel` and `Webpack` to bundle the different files - using the configuration of the [`webpack.config.js`](./webpack.config.js) file.
-
-If you want to learn more, check out [Bundling node modules in k6](https://k6.io/docs/using-k6/modules#bundling-node-modules).
+We will use the official APIs from k6.io under [here](https://test-api.k6.io/)
