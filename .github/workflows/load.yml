@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
    inputs:
     test:
-      description: 'The test script to run example get-200-status-test'
+      description: 'The test script to run example k6-test-sample'
       required: true
     platform:
       description: 'The base url to be used like https://test-api.k6.io/'
@@ -33,10 +33,3 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: start
-
-        # set up k6
-      - name: Run local k6 test
-        uses: k6io/action@v0.2.0
-        with:
-         filename: dist/${{ github.event.inputs.test }}.js
-         flags: --env BASE_URL=${{ github.event.inputs.platform }}
