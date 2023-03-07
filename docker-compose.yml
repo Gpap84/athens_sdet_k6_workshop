@@ -10,7 +10,7 @@ services:
     ports:
       - "8086:8086"
     environment:
-      - INFLUXDB_DB=...
+      - INFLUXDB_DB=k6
 
   grafana:
     image: grafana/grafana:latest
@@ -23,7 +23,7 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_BASIC_ENABLED=false
     volumes:
-      - ./grafana-datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./influx.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
   k6:
     image: grafana/k6:latest
     networks:
@@ -31,6 +31,6 @@ services:
     ports:
       - "6565:6565"
     environment:
-      - K6_OUT=...
+      - K6_OUT=influxdb=http://influxdb:8086/k6
     volumes:
       - ./dist:/scripts

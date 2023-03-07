@@ -17,12 +17,17 @@
     "babel-loader": "8.2.2",
     "clean-webpack-plugin": "4.0.0-alpha.0",
     "copy-webpack-plugin": "^9.0.1",
+    "k6-html-reporter": "^1.0.5",
     "typescript": "4.2.4",
     "webpack": "5.35.1",
     "webpack-cli": "4.6.0",
     "webpack-glob-entries": "^1.0.1"
   },
   "scripts": {
-    "start": "export NODE_OPTIONS=--openssl-legacy-provider && webpack"
+    "run:build": "export NODE_OPTIONS=--openssl-legacy-provider && webpack",
+    "run:native:cloud": "k6 cloud -e BASE_URL=https://test-api.k6.io dist/k6-test-sample.js",
+    "run:native": "k6 run -e BASE_URL=https://test-api.k6.io dist/k6-test-sample.js",
+    "run:prometheus:docker": "docker-compose run --rm k6 run /scripts/soak-test.js",
+    "run:influx:docker": "docker-compose up -d influxdb grafana && docker-compose run -e BASE_URL=https://test-api.k6.io --rm k6 run /scripts/k6-test-sample.js"
   }
 }
